@@ -1,34 +1,29 @@
 import os
-from pathlib import Path
+from path import Path
+ROOT_DIR = Path(__name__).parent
 
-def apagar_imagens(diretorio):
-    # Verificar se o diretório existe
-    if not os.path.exists(diretorio):
-        print(f'O diretório {diretorio} não existe.')
-        return
+def deletar_arquivos_por_tipo(diretorio, tipo):
+    # Percorre todos os arquivos no diretório
+    for raiz, pastas, arquivos in os.walk(diretorio):
+        for arquivo in arquivos:
+            # Verifica se o arquivo tem o tipo especificado
+            if arquivo.endswith(tipo):
+                # Constrói o caminho completo do arquivo
+                caminho_arquivo = os.path.join(raiz, arquivo)
+                print(caminho_arquivo)
+                # Exclui o arquivo
+                os.remove(caminho_arquivo)
+                print(f"Arquivo '{caminho_arquivo}' excluído com sucesso.")
 
-    # Listar todos os arquivos no diretório
-    arquivos = os.listdir(diretorio)
-
-    # Filtrar apenas os arquivos de imagem (você pode ajustar os formatos de imagem conforme necessário)
-    imagens = [arquivo for arquivo in arquivos if arquivo.endswith('.jpg') or arquivo.endswith('.png')]
-
-    # Verificar se há imagens no diretório
-    if not imagens:
-        print(f'Não foram encontradas imagens no diretório {diretorio}.')
-        return
-
-    # Confirmar com o usuário antes de excluir as imagens
-    confirmacao = input(f'Tem certeza que deseja excluir {len(imagens)} imagens em {diretorio}? (sim/não): ')
-    if confirmacao.lower() != 'sim':
-        print('Operação cancelada.')
-        return
-
-    # Excluir cada imagem
-    for imagem in imagens:
-        caminho_imagem = os.path.join(diretorio, imagem)
-        os.remove(caminho_imagem)
-        print(f'{imagem} excluída com sucesso.')
-
-diretorio = Path(__file__).parent  # Substitua pelo caminho do diretório onde suas imagens estão
-apagar_imagens(diretorio)
+# Exemplo de uso:
+diretorio_alvo = ROOT_DIR  # Substitua pelo caminho do seu diretório
+tipo_arquivo = [".aux",".fdb_latexmk",".fls",".log",".out",".synctex.gz",] # Substitua pelo tipo de arquivo que você deseja excluir, por exemplo, '.txt'
+diretorios = ["conjunto", "curriculo","curso_latex", "Docker", "Inglês", "modelo_tcc", "python","servidor_django", "slide", "slide2", "solid", "test", "trab_1_micro", "trab_ingles", "trab_so"]
+"""for directory in diretorios:
+    diretorio_alvo = ROOT_DIR / directory 
+    for arquivos in tipo_arquivo:
+        deletar_arquivos_por_tipo(diretorio_alvo, arquivos)
+"""
+for arquivos in tipo_arquivo:
+        print(arquivos)
+        deletar_arquivos_por_tipo(diretorio_alvo, arquivos)
